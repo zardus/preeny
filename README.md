@@ -19,6 +19,8 @@ LD_PRELOAD="Linux_x86/desock.so Linux_x86_64/defork.so Linux_x86_64/dealarm.so" 
 ```
 
 Pretty awesome stuff!
+As a bonus, this should let you pass socket applications to AFL!
+
 Of course, you can pick and choose which preloads you want:
 
 ```bash
