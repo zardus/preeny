@@ -25,7 +25,6 @@ pthread_t *preeny_socket_threads_to_back[PREENY_MAX_FD] = { 0 };
 int preeny_socket_sync(int from, int to, int timeout)
 {
 	struct pollfd poll_in = { from, POLLIN, 0 };
-	struct pollfd poll_out = { to, POLLOUT, 0 };
 	char read_buf[READ_BUF_SIZE];
 	int total_n;
 	char error_buf[1024];
@@ -57,19 +56,6 @@ int preeny_socket_sync(int from, int to, int timeout)
 	n = 0;
 	while (n != total_n)
 	{
-		//r = poll(&poll_out, 1, timeout);
-		//if (r < 0)
-		//{
-		//	strerror_r(errno, error_buf, 1024);
-		//	preeny_debug("write poll() received error '%s' on fd %d\n", error_buf, to);
-		//	return 0;
-		//}
-		//else if (poll_out.revents == 0)
-		//{
-		//	preeny_debug("write poll() timed out on fd %d\n", to);
-		//	return 0;
-		//}
-
 		r = write(to, read_buf, total_n - n);
 		if (r < 0)
 		{
@@ -98,8 +84,8 @@ __attribute__((destructor)) void preeny_desock_shutdown()
 		if (preeny_socket_threads_to_front[i])
 		{
 			preeny_debug("sending SIGINT to thread %d...\n", i);
-			pthread_kill(*preeny_socket_threads_to_front[i], SIGUSR1);
-			pthread_kill(*preeny_socket_threads_to_back[i], SIGUSR1);
+			pthread_join(*preeny_socket_threads_to_front[i], NULL);
+			pthread_join(*preeny_socket_threads_to_back[i], NULL);
 			preeny_debug("... sent!\n");
 			to_sync[i] = 1;
 		}
@@ -110,15 +96,12 @@ __attribute__((destructor)) void preeny_desock_shutdown()
 		if (to_sync[i])
 		{
 			//while (preeny_socket_sync(0, PREENY_SOCKET(i), 10) > 0);
-			while (preeny_socket_sync(PREENY_SOCKET(i), 1, 20) > 0) sleep(1);
+			while (preeny_socket_sync(PREENY_SOCKET(i), 1, 0) > 0);
 		}
 	}
 
 	preeny_debug("... shutdown complete!\n");
-	sleep(1);
 }
-
-void preeny_socket_signal_handler(int sig) { }
 
 void preeny_socket_sync_loop(int from, int to)
 {
@@ -127,20 +110,9 @@ void preeny_socket_sync_loop(int from, int to)
 
 	preeny_debug("starting forwarding from %d to %d!\n", from, to);
 
-	struct sigaction sig_data = { 0 };
-	sig_data.sa_handler = preeny_socket_signal_handler;
-	sigemptyset(&sig_data.sa_mask);
-	r = sigaction(SIGUSR1, &sig_data, NULL);
-	if (r < 0)
-	{
-		strerror_r(errno, error_buf, 1024);
-		preeny_debug("sigaction() received error '%s' on fd %d\n", error_buf, from);
-		return;
-	}
-
 	while (!preeny_desock_shutdown_flag)
 	{
-		r = preeny_socket_sync(from, to, -1);
+		r = preeny_socket_sync(from, to, 15);
 		if (r < 0) return;
 	}
 }
