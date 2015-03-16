@@ -1,8 +1,8 @@
 #pragma once
 
-extern int debug_on;
-extern int info_on;
-extern int error_on;
+extern int preeny_debug_on;
+extern int preeny_info_on;
+extern int preeny_error_on;
 
 void preeny_debug(char *, ...);
 void preeny_info(char *, ...);
