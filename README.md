@@ -60,12 +60,18 @@ For example:
 # tests/hello 
 Hello world!
 # cat hello.p 
-[test]
+[hello]
 address=0x4005c4
-content='414141414100'
+content='4141414141'
+
+[world]
+address=0x4005ca
+content='6161616161'
 # PATCH="hello.p" LD_PRELOAD="Linux_x86_64/patch.so" tests/hello 
---- section test in file hello.p specifies 6-byte patch at 0x4005c4
-AAAAA
+--- section hello in file hello.p specifies 5-byte patch at 0x4005c4
+--- section world in file hello.p specifies 5-byte patch at 0x4005ca
+AAAAA aaaaa!
+
 ```
 
 Having different patch files and just enabling/disabling them via preload is oftentimes easier than modifying the underlying binary.
