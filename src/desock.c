@@ -169,10 +169,10 @@ int socket(int domain, int type, int protocol)
 		return -1;
 	}
 
-	pthread_create(preeny_socket_threads_to_back[fds[0]], NULL, (void*(*)(void*))preeny_socket_sync_to_back, (void *)front_socket);
+	r = pthread_create(preeny_socket_threads_to_back[fds[0]], NULL, (void*(*)(void*))preeny_socket_sync_to_back, (void *)front_socket);
 	if (r)
 	{
-		perror("failed creating front-sync thread");
+		perror("failed creating back-sync thread");
 		return -1;
 	}
 
