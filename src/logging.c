@@ -51,6 +51,6 @@ void preeny_error(char *fmt, ...)
 __attribute__((constructor)) void preeny_logging_init()
 {
 	preeny_debug_on = preeny_debug_on || (getenv("PREENY_DEBUG") && (strcmp(getenv("PREENY_DEBUG"), "1") == 0));
-	preeny_info_on = preeny_debug_on || (getenv("PREENY_INFO") && (strcmp(getenv("PREENY_INFO"), "1") == 0));
-	preeny_error_on = preeny_debug_on || (getenv("PREENY_ERROR") && (strcmp(getenv("PREENY_ERROR"), "1") == 0));
+	preeny_info_on = preeny_info_on || (getenv("PREENY_INFO") && (strcmp(getenv("PREENY_INFO"), "1") == 0));
+	preeny_error_on = preeny_error_on || (getenv("PREENY_ERROR") && (strcmp(getenv("PREENY_ERROR"), "1") == 0));
 }
