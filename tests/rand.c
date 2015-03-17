@@ -4,7 +4,14 @@
 
 int main()
 {
+	int i;
+
 	srand(time(0));
-	printf("rand() returned %d\n", rand());
-	printf("random() returned %ld\n", random());
+
+	for (i = 0; i < 10; i++)
+	{
+		printf("%d\n", i);
+		printf("rand() returned %d\n", rand());
+		//printf("random() returned %ld\n", random());
+	}
 }
