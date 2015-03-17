@@ -1,7 +1,7 @@
 # preeny
 
 Preeny helps you pwn noobs by making it easier to interact with services locally.
-It disables `fork()` and `alarm()` and, if you want, can convert a server application to a console one using clever/hackish tricks, and can even patch binaries!
+It disables `fork()`, `rand()`, and `alarm()` and, if you want, can convert a server application to a console one using clever/hackish tricks, and can even patch binaries!
 
 ## Building
 
@@ -40,9 +40,11 @@ Have fun!
 The simple functionality in preeny is disabling of fork and alarm.
 CTF services frequently use alarm to help mitigate hung connections from players, but this has the effect of being frustrating when you're debugging the service.
 Fork is sometimes frustrating because some tools are unable to follow fork on some platforms and, when they do follow fork, the parent is oftentimes abandoned in the background, needing to be terminated manually afterwards.
+Random is random.
 
 `dealarm.so` replaces `alarm()` with a function that just does a `return 0`.
 `defork.so` does the same thing to `fork()`, means that the program will think that the fork has succeeded and that it's the child.
+`derand.so` replaces `rand()` and `random()` with a `return 42;`.
 
 ## De-socketing
 
