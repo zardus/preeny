@@ -44,7 +44,7 @@ Fork is sometimes frustrating because some tools are unable to follow fork on so
 `dealarm.so` replaces `alarm()` with a function that just does a `return 0`.
 `defork.so` does the same thing to `fork()`, means that the program will think that the fork has succeeded and that it's the child.
 
-# Derandomization
+## Derandomization
 
 It's often easiest to test your exploits without extra randomness, and then ease up on the cheating little by little.
 Preeny ships with two modules to help: `derand` and `desrand`.
