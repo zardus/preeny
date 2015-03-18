@@ -40,11 +40,42 @@ Have fun!
 The simple functionality in preeny is disabling of fork and alarm.
 CTF services frequently use alarm to help mitigate hung connections from players, but this has the effect of being frustrating when you're debugging the service.
 Fork is sometimes frustrating because some tools are unable to follow fork on some platforms and, when they do follow fork, the parent is oftentimes abandoned in the background, needing to be terminated manually afterwards.
-Random is random.
 
 `dealarm.so` replaces `alarm()` with a function that just does a `return 0`.
 `defork.so` does the same thing to `fork()`, means that the program will think that the fork has succeeded and that it's the child.
-`derand.so` replaces `rand()` and `random()` with a `return 42;`.
+
+# Derandomization
+
+It's often easiest to test your exploits without extra randomness, and then ease up on the cheating little by little.
+Preeny ships with two modules to help: `derand` and `desrand`.
+
+`derand.so` replaces `rand()` and `random()` and returns a configurable value, just specify it in the PATH environment (or go with the default of 42):
+
+```bash
+# this will return 42 on each rand() call
+LD_PRELOAD="Linux_x86_64/derand.so" tests/rand
+
+# this will return 1337 on each rand() call
+RAND=1337 LD_PRELOAD="Linux_x86_64/derand.so" tests/rand
+```
+
+For slightly more complex things, `desrand.so` lets you override the `srand` function to your liking.
+
+```bash
+# this simply sets the seed to 42
+LD_PRELOAD="Linux_x86_64/desrand.so" tests/rand
+
+# this sets the seed to 1337
+SEED=1337 LD_PRELOAD="Linux_x86_64/desrand.so" tests/rand
+
+# this sets the seed to such that the first "rand() % 128" will be 10
+WANT=10 MOD=128 LD_PRELOAD="Linux_x86_64/desrand.so" tests/rand
+
+# finally, this makes the *third* "rand() % 128" be 10
+SKIP=2 WANT=10 MOD=128 LD_PRELOAD="Linux_x86_64/desrand.so" tests/rand
+```
+
+`desrand` does all this by brute-forcing the seed value, so keep in mind that startup speed will get considerably slower as `MOD` increases.
 
 ## De-socketing
 
