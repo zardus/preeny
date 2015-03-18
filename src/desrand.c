@@ -6,7 +6,7 @@
 
 void srand(unsigned int s)
 {
-	char *r_str = getenv("RAND");
+	char *r_str = getenv("WANT");
 	char *skip_str = getenv("SKIP");
 	char *mod_str = getenv("MOD");
 	char *seed_str = getenv("SEED");
