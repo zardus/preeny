@@ -7,10 +7,14 @@ It disables `fork()`, `rand()`, and `alarm()` and, if you want, can convert a se
 
 preeny's patch functionality uses `libini_config` to read `.ini` files.
 On debian-based distros, you can install `libini-config-dev`.
-If you're not running a debian-based distro, you've brought the pain upon yourself.
+On Arch-based distros, you can install `ding-libs`.
+If you're not running a debian or Arch based distro, you've brought the pain upon yourself.
 
 You can build preeny by doing `make`.
 It'll create a directory named after the OS and architecture type, and put the libraries there.
+
+If you intend to build preeny for a 32 bit system on a 64 bit host for example, you can do:
+`PLATFORM=-m32 setarch i686 make`.
 
 ## Usage
 
