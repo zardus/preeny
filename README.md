@@ -39,6 +39,22 @@ LD_PRELOAD="Linux_x86_64/dealarm.so" ~/code/security/codegate/2015/rodent/rodent
 
 Have fun!
 
+## Summary
+
+Preeny has the following modules
+
+| Name | Summary |
+|------|---------|
+| delarm | Disables alarm() |
+| defork | Disables fork() |
+| deptrace | Disables ptrace() |
+| derand | Disables rand() and random() |
+| desigact | Disables sigaction() |
+| desock | Channels socket communication to the console |
+| desock\_dup | Channels socket communication to the console (simpler method) |
+| desrand | Does tricky things with srand() to control randomness. |
+| patch | Patches programs at load time. |
+
 ## Simple Things
 
 The simple functionality in preeny is disabling of fork and alarm.
