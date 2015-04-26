@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -6,6 +8,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <signal.h>
+#include <dlfcn.h>
 #include <errno.h>
 #include <stdio.h>
 #include <poll.h>
@@ -136,12 +139,33 @@ void *preeny_socket_sync_to_front(void *fd)
 	return NULL;
 }
 
+//
+// originals
+//
+int (*original_socket)(int, int, int);
+int (*original_bind)(int, const struct sockaddr *, socklen_t);
+int (*original_listen)(int, int);
+int (*original_accept)(int, struct sockaddr *, socklen_t *);
+__attribute__((constructor)) void preeny_desock_orig()
+{
+	original_socket = dlsym(RTLD_NEXT, "socket");
+	original_listen = dlsym(RTLD_NEXT, "listen");
+	original_accept = dlsym(RTLD_NEXT, "accept");
+	original_bind = dlsym(RTLD_NEXT, "bind");
+}
+
 int socket(int domain, int type, int protocol)
 {
 	int fds[2];
 	int r = socketpair(AF_UNIX, type, protocol, fds);
 	int front_socket;
 	int back_socket;
+
+	if (domain != AF_INET && domain != AF_INET6)
+	{
+		preeny_info("Ignoring non-internet socket.");
+		return original_socket(domain, type, protocol);
+	}
 
 	preeny_debug("Intercepted socket()!\n");
 
@@ -181,16 +205,25 @@ int socket(int domain, int type, int protocol)
 
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 {
-	return dup(sockfd);
+	if (preeny_socket_threads_to_front[sockfd]) return dup(sockfd);
+	else return original_accept(sockfd, addr, addrlen);
 }
 
 int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
-	preeny_info("Emulating bind on port %d\n", ntohs(((struct sockaddr_in*)addr)->sin_port));
-	return 0;
+	if (preeny_socket_threads_to_front[sockfd])
+	{
+		preeny_info("Emulating bind on port %d\n", ntohs(((struct sockaddr_in*)addr)->sin_port));
+		return 0;
+	}
+	else
+	{
+		return original_bind(sockfd, addr, addrlen);
+	}
 }
 
 int listen(int sockfd, int backlog)
 {
-	return 0;
+	if (preeny_socket_threads_to_front[sockfd]) return 0;
+	else return original_listen(sockfd, backlog);
 }
