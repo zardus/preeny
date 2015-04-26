@@ -84,7 +84,9 @@ SKIP=2 WANT=10 MOD=128 LD_PRELOAD="Linux_x86_64/desrand.so" tests/rand
 ## De-socketing
 
 Certain tools (such as American Fuzzy Lop, for example) are unable to handle network binaries.
-To mitigate this, `desock.so` neuters `socket()`, `bind()`, `listen()`, and `accept()`, making it return sockets that are, through hackish ways, synchronized to `stdin` and `stdout`.
+Preeny includes two "de-socketing" modules.
+`desock.so` neuters `socket()`, `bind()`, `listen()`, and `accept()`, making it return sockets that are, through hackish ways, synchronized to `stdin` and `stdout`.
+`desock_dup.so` is a simpler version for programs that dup accepted sockets over file descriptors 0, 1, and 2.
 
 ## Preload patching
 

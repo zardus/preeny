@@ -2,10 +2,13 @@ CC=gcc
 COMMON_DEPS=logging.c
 PLATFORM?=-m64
 
-all: desock.so defork.so dealarm.so patch.so derand.so desrand.so deptrace.so
+all: desock.so defork.so dealarm.so patch.so derand.so desrand.so deptrace.so desock_dup.so
 
 desock.so: desock.c $(COMMON_DEPS)
 	bash build_so.sh $@ $(PLATFORM) $^ -lpthread
+
+desock_dup.so: desock_dup.c $(COMMON_DEPS)
+	bash build_so.sh $@ $(PLATFORM) $^ -ldl
 
 defork.so: defork.c $(COMMON_DEPS)
 	bash build_so.sh $@ $(PLATFORM) $^
