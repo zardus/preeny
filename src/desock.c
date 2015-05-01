@@ -146,12 +146,14 @@ int (*original_socket)(int, int, int);
 int (*original_bind)(int, const struct sockaddr *, socklen_t);
 int (*original_listen)(int, int);
 int (*original_accept)(int, struct sockaddr *, socklen_t *);
+int (*original_connect)(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 __attribute__((constructor)) void preeny_desock_orig()
 {
 	original_socket = dlsym(RTLD_NEXT, "socket");
 	original_listen = dlsym(RTLD_NEXT, "listen");
 	original_accept = dlsym(RTLD_NEXT, "accept");
 	original_bind = dlsym(RTLD_NEXT, "bind");
+	original_connect = dlsym(RTLD_NEXT, "connect");
 }
 
 int socket(int domain, int type, int protocol)
@@ -231,4 +233,10 @@ int listen(int sockfd, int backlog)
 {
 	if (preeny_socket_threads_to_front[sockfd]) return 0;
 	else return original_listen(sockfd, backlog);
+}
+
+int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+{
+	if (preeny_socket_threads_to_front[sockfd]) return 0;
+	else return original_connect(sockfd, addr, addrlen);
 }
