@@ -3,19 +3,6 @@
 Preeny helps you pwn noobs by making it easier to interact with services locally.
 It disables `fork()`, `rand()`, and `alarm()` and, if you want, can convert a server application to a console one using clever/hackish tricks, and can even patch binaries!
 
-## Building
-
-preeny's patch functionality uses `libini_config` to read `.ini` files.
-On debian-based distros, you can install `libini-config-dev`.
-On Arch-based distros, you can install `ding-libs`.
-If you're not running a debian or Arch based distro, you've brought the pain upon yourself.
-
-You can build preeny by doing `make`.
-It'll create a directory named after the OS and architecture type, and put the libraries there.
-
-If you intend to build preeny for a 32 bit system on a 64 bit host for example, you can do:
-`PLATFORM=-m32 setarch i686 make`.
-
 Preeny has the following modules:
 
 | Name | Summary |
@@ -29,6 +16,19 @@ Preeny has the following modules:
 | desock\_dup | Channels socket communication to the console (simpler method) |
 | desrand | Does tricky things with srand() to control randomness. |
 | patch | Patches programs at load time. |
+
+## Building
+
+preeny's patch functionality uses `libini_config` to read `.ini` files.
+On debian-based distros, you can install `libini-config-dev`.
+On Arch-based distros, you can install `ding-libs`.
+If you're not running a debian or Arch based distro, you've brought the pain upon yourself.
+
+You can build preeny by doing `make`.
+It'll create a directory named after the OS and architecture type, and put the libraries there.
+
+If you intend to build preeny for a 32 bit system on a 64 bit host for example, you can do:
+`PLATFORM=-m32 setarch i686 make`.
 
 ## Usage
 
