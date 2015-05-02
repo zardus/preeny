@@ -159,7 +159,6 @@ __attribute__((constructor)) void preeny_desock_orig()
 int socket(int domain, int type, int protocol)
 {
 	int fds[2];
-	int r = socketpair(AF_UNIX, type, protocol, fds);
 	int front_socket;
 	int back_socket;
 
@@ -168,7 +167,8 @@ int socket(int domain, int type, int protocol)
 		preeny_info("Ignoring non-internet socket.");
 		return original_socket(domain, type, protocol);
 	}
-
+	
+	int r = socketpair(AF_UNIX, type, 0, fds);
 	preeny_debug("Intercepted socket()!\n");
 
 	if (r != 0)
