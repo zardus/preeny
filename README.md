@@ -16,6 +16,20 @@ It'll create a directory named after the OS and architecture type, and put the l
 If you intend to build preeny for a 32 bit system on a 64 bit host for example, you can do:
 `PLATFORM=-m32 setarch i686 make`.
 
+Preeny has the following modules:
+
+| Name | Summary |
+|------|---------|
+| delarm | Disables alarm() |
+| defork | Disables fork() |
+| deptrace | Disables ptrace() |
+| derand | Disables rand() and random() |
+| desigact | Disables sigaction() |
+| desock | Channels socket communication to the console |
+| desock\_dup | Channels socket communication to the console (simpler method) |
+| desrand | Does tricky things with srand() to control randomness. |
+| patch | Patches programs at load time. |
+
 ## Usage
 
 Let's say that you have an application that you want to interact with on the commandline, but it a) forks, b) sets an alarm which makes it hard to take your time studying its behavior, and c) demands to be connected to even if you don't want to do that.
@@ -39,22 +53,6 @@ LD_PRELOAD="Linux_x86_64/dealarm.so" ~/code/security/codegate/2015/rodent/rodent
 
 Have fun!
 
-## Summary
-
-Preeny has the following modules
-
-| Name | Summary |
-|------|---------|
-| delarm | Disables alarm() |
-| defork | Disables fork() |
-| deptrace | Disables ptrace() |
-| derand | Disables rand() and random() |
-| desigact | Disables sigaction() |
-| desock | Channels socket communication to the console |
-| desock\_dup | Channels socket communication to the console (simpler method) |
-| desrand | Does tricky things with srand() to control randomness. |
-| patch | Patches programs at load time. |
-
 ## Simple Things
 
 The simple functionality in preeny is disabling of fork and alarm.
@@ -69,7 +67,7 @@ Fork is sometimes frustrating because some tools are unable to follow fork on so
 It's often easiest to test your exploits without extra randomness, and then ease up on the cheating little by little.
 Preeny ships with two modules to help: `derand` and `desrand`.
 
-`derand.so` replaces `rand()` and `random()` and returns a configurable value, just specify it in the PATH environment (or go with the default of 42):
+`derand.so` replaces `rand()` and `random()` and returns a configurable value. Just specify it in the RAND environment (or go with the default of 42):
 
 ```bash
 # this will return 42 on each rand() call
