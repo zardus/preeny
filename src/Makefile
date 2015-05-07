@@ -1,6 +1,5 @@
-CC=gcc
 COMMON_DEPS=logging.c
-PLATFORM?=-m64
+PLATFORM?=
 
 all: desock.so defork.so dealarm.so patch.so derand.so desrand.so deptrace.so desock_dup.so
 

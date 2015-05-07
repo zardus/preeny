@@ -1,22 +1,30 @@
 #!/bin/bash
 
-if [ $(uname -m) == "x86_64" -o $(uname -m) == "amd64" ]
+[ -z "$CC" -a -z "$MACHINE" ] && CC=gcc
+[ -z "$MACHINE" ] && MACHINE=$($CC -dumpmachine)
+[ -z "$CC" ] && CC=$MACHINE-gcc
+
+if [[ $MACHINE == *x86_64* ]]
 then
 	OPTS="$OPTS -DPLT_ENTRIES_64Baa"
 fi
 
-if [ $(uname -s) == "Linux" ]
+OPTS="$OPTS -fPIC"
+if [[ $MACHINE == *linux* ]]
 then
-	OPTS="$OPTS -DLINUX -ldl -fPIC"
-elif [ $(uname -s) == "FreeBSD" ]
+	OPTS="$OPTS -DLINUX -ldl"
+elif [[ $MACHINE == *freebsd* ]]
 then
-	OPTS="$OPTS -DFREEBSD -fPIC"
+	OPTS="$OPTS -DFREEBSD"
+elif [[ $MACHINE == *-elf* ]]
+then
+	OPTS="$OPTS -mabicalls"
 fi
 
 OUT=$1
 IN=$2
 shift 2
 
-gcc $IN -o $OUT -shared $OPTS "$@" &&
-mkdir -p ../$(uname -s)_$(uname -m) &&
-mv $OUT ../$(uname -s)_$(uname -m)/
+$CC $IN -o $OUT -shared $OPTS "$@" &&
+mkdir -p ../$MACHINE &&
+mv $OUT ../$MACHINE/
