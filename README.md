@@ -16,6 +16,7 @@ Preeny has the following modules:
 | desock\_dup | Channels socket communication to the console (simpler method) |
 | desrand | Does tricky things with srand() to control randomness. |
 | patch | Patches programs at load time. |
+| startstop | Sends SIGSTOP to itself on startup, to suspend the process. |
 
 ## Building
 

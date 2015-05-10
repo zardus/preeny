@@ -1,7 +1,7 @@
 COMMON_DEPS=logging.c
 PLATFORM?=
 
-all: desock.so defork.so dealarm.so patch.so derand.so desrand.so deptrace.so desock_dup.so
+all: desock.so defork.so dealarm.so patch.so derand.so desrand.so deptrace.so desock_dup.so startstop.so
 
 desock.so: desock.c $(COMMON_DEPS)
 	bash build_so.sh $@ $(PLATFORM) $^ -lpthread
@@ -10,6 +10,9 @@ desock_dup.so: desock_dup.c $(COMMON_DEPS)
 	bash build_so.sh $@ $(PLATFORM) $^ -ldl
 
 defork.so: defork.c $(COMMON_DEPS)
+	bash build_so.sh $@ $(PLATFORM) $^
+
+startstop.so: startstop.c $(COMMON_DEPS)
 	bash build_so.sh $@ $(PLATFORM) $^
 
 dealarm.so: dealarm.c $(COMMON_DEPS)
