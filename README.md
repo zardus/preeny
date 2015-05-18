@@ -16,6 +16,7 @@ Preeny has the following modules:
 | desock\_dup | Channels socket communication to the console (simpler method) |
 | ensock | The opposite of desock -- like an LD\_PRELOAD version of socat! |
 | desrand | Does tricky things with srand() to control randomness. |
+| mallocwatch | When ltrace is inconvenient, mallocwatch provides info on heap operations. |
 | writeout | Some binaries write() to fd 0, expecting it to be a two-way socket. This makes that work (by redirecting to fd 1). |
 | patch | Patches programs at load time. |
 | startstop | Sends SIGSTOP to itself on startup, to suspend the process. |
