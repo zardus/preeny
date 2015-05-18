@@ -6,7 +6,7 @@
 #include <stdarg.h>
 
 int preeny_debug_on = 0;
-int preeny_info_on = 1;
+int preeny_info_on = 0;
 int preeny_error_on = 1;
 
 void preeny_debug(char *fmt, ...)
