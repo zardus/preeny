@@ -14,7 +14,9 @@ Preeny has the following modules:
 | desigact | Disables sigaction() |
 | desock | Channels socket communication to the console |
 | desock\_dup | Channels socket communication to the console (simpler method) |
+| ensock | The opposite of desock -- like an LD\_PRELOAD version of socat! |
 | desrand | Does tricky things with srand() to control randomness. |
+| writeout | Some binaries write() to fd 0, expecting it to be a two-way socket. This makes that work (by redirecting to fd 1). |
 | patch | Patches programs at load time. |
 | startstop | Sends SIGSTOP to itself on startup, to suspend the process. |
 
@@ -104,6 +106,10 @@ Certain tools (such as American Fuzzy Lop, for example) are unable to handle net
 Preeny includes two "de-socketing" modules.
 `desock.so` neuters `socket()`, `bind()`, `listen()`, and `accept()`, making it return sockets that are, through hackish ways, synchronized to `stdin` and `stdout`.
 `desock_dup.so` is a simpler version for programs that dup accepted sockets over file descriptors 0, 1, and 2.
+
+### En-socketing
+
+You can also use preeny to turn a normal binary into a socket binary! Just set the `PORT` environment variable (default is 1337) and preload `ensock.so`!
 
 ## Preload patching
 
