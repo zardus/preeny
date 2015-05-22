@@ -34,7 +34,7 @@ __attribute__((constructor)) void preeny_socketize()
 	}
 
 	int optval = 1;
-	setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+	setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
 	fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) & (~O_NONBLOCK));
 
 	bzero(&serv_addr, sizeof(serv_addr));
