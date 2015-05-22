@@ -108,7 +108,7 @@ Preeny includes two "de-socketing" modules.
 `desock.so` neuters `socket()`, `bind()`, `listen()`, and `accept()`, making it return sockets that are, through hackish ways, synchronized to `stdin` and `stdout`.
 `desock_dup.so` is a simpler version for programs that dup accepted sockets over file descriptors 0, 1, and 2.
 
-### En-socketing
+## En-socketing
 
 You can also use preeny to turn a normal binary into a socket binary! Just set the `PORT` environment variable (default is 1337) and preload `ensock.so`!
 
