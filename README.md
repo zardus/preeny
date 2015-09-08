@@ -31,10 +31,12 @@ If you're not running a debian or Arch based distro, you've brought the pain upo
 You can build preeny by doing `make`.
 It'll create a directory named after the OS and architecture type, and put the libraries there.
 
-If you intend to build preeny for a 32 bit system (on a 64 bit host, for example), you can do:
-`PLATFORM=-m32 setarch i686 make`.
+## Cross-compilation
 
-Alternatively, if you want to utilize a cross-compiler, the `CC` variable before running `make` (and, because some modules fail in cross-complilation, use `make -i`). For example: `CC=mips-malta-linux-gnu-gcc make -i`
+If you need to build 32-bit x86 preeny libs on a 64-bit x86 host, you can do: `make CFLAGS=-m32`.
+
+Alternatively, if you want to utilize a cross-compiler, pass the `CC` variable to `make`. For example: `make -i CC=mips-malta-linux-gnu-gcc`.
+Because some modules fail in cross-complilation, it's recommended to use `make -i`.
 
 ## Usage
 

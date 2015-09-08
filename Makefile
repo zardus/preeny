@@ -1,5 +1,10 @@
-all:
-	make -C src
+all: dist tests
+
+dist:
+	make -C src clean
+	make -C src dist
+
+tests:
 	make -C tests
 
 clean:
