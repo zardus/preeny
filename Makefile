@@ -1,3 +1,5 @@
+.PHONY: all dist tests clean
+
 all: dist tests
 
 dist:

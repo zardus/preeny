@@ -1,3 +1,5 @@
+.PHONY: all dist clean
+
 PLATFORM?=
 
 ifndef MACHINE

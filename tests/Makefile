@@ -1,3 +1,5 @@
+.PHONY: all clean
+
 all: sock hello rand
 
 sock: sock.c
