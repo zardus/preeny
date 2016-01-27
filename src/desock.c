@@ -54,6 +54,11 @@ int preeny_socket_sync(int from, int to, int timeout)
 		preeny_info("synchronization of fd %d to %d shutting down due to read error '%s'\n", from, to, error_buf);
 		return -1;
 	}
+	else if (n == 0 && from == 0)
+	{
+		preeny_info("synchronization of fd %d to %d shutting down due to EOF\n");
+		return -1;
+	}
 	preeny_debug("read %d bytes from %d (will write to %d)\n", n, from, to);
 
 	n = 0;
