@@ -24,7 +24,7 @@ endif
 
 #$(info $(MACHINE) $(CC))
 
-ALL_MODULES=desock.so defork.so dealarm.so patch.so derand.so desrand.so deptrace.so desock_dup.so startstop.so writeout.so ensock.so mallocwatch.so
+ALL_MODULES=desock.so defork.so dealarm.so patch.so derand.so desrand.so deptrace.so desock_dup.so startstop.so writeout.so ensock.so mallocwatch.so desleep.so
 all: $(ALL_MODULES)
 
 COMMON_DEPS=logging.c
@@ -63,6 +63,9 @@ mallocwatch.so: mallocwatch.c $(COMMON_DEPS)
 
 patch.so: patch.c $(COMMON_DEPS)
 	$(CC) $^ -o $@ -shared -fPIC $(CFLAGS) -ldl -lini_config
+
+desleep.so: desleep.c $(COMMON_DEPS)
+	$(CC) $^ -o $@ -shared -fPIC $(CFLAGS) -ldl
 
 dist: all
 	mkdir -p ../$(MACHINE)
