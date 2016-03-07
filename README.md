@@ -24,18 +24,29 @@ Preeny has the following modules:
 ## Building
 
 preeny's patch functionality uses `libini_config` to read `.ini` files.
-On debian-based distros, you can install `libini-config-dev`.
-On Arch-based distros, you can install `ding-libs`.
-If you're not running a debian or Arch based distro, you've brought the pain upon yourself.
 
-You can build preeny by doing `make`.
-It'll create a directory named after the OS and architecture type, and put the libraries there.
+* On debian-based distros, you can install `libini-config-dev`.
+* On Arch-based distros, you can install `ding-libs`.
+* On Fedora-based distros, you can install `libini_config-devel`.
+
+If you're not running a debian, Arch, or Fedora based distro, you've brought the pain upon yourself.
+
+You can build preeny by doing:
+
+    make
+
+It'll create a directory named after the OS and architecture type, then put the libraries there.
 
 ## Cross-compilation
 
-If you need to build 32-bit x86 preeny libs on a 64-bit x86 host, you can do: `make CFLAGS=-m32`.
+If you need to build 32-bit x86 preeny libs on a 64-bit x86 host, you can do:
 
-Alternatively, if you want to utilize a cross-compiler, pass the `CC` variable to `make`. For example: `make -i CC=mips-malta-linux-gnu-gcc`.
+    make CFLAGS=-m32
+
+Alternatively, if you want to utilize a cross-compiler, pass the `CC` variable to `make`.  For example:
+
+    make -i CC=mips-malta-linux-gnu-gcc
+
 Because some modules fail in cross-complilation, it's recommended to use `make -i`.
 
 ## Usage
@@ -44,12 +55,11 @@ Let's say that you have an application that you want to interact with on the com
 You can do:
 
 ```bash
-make
-LD_PRELOAD=x86_64-linux-gnu/desock.so:x86_64-linux-gnu/defork.so:x86_64-linux-gnu/dealarm.so ~/code/security/codegate/2015/rodent/rodent
+make LD_PRELOAD=x86_64-linux-gnu/desock.so:x86_64-linux-gnu/defork.so:x86_64-linux-gnu/dealarm.so \
+  ~/code/security/codegate/2015/rodent/rodent
 ```
 
-Pretty awesome stuff!
-Of course, you can pick and choose which preloads you want:
+Pretty awesome stuff!  Of course, you can pick and choose which preloads you want:
 
 ```bash
 echo 'No fork or alarm for you, but I still want to netcat!'
@@ -64,7 +74,9 @@ Have fun!
 ## Simple Things
 
 The simple functionality in preeny is disabling of fork and alarm.
+
 CTF services frequently use alarm to help mitigate hung connections from players, but this has the effect of being frustrating when you're debugging the service.
+
 Fork is sometimes frustrating because some tools are unable to follow fork on some platforms and, when they do follow fork, the parent is oftentimes abandoned in the background, needing to be terminated manually afterwards.
 
 `dealarm.so` replaces `alarm()` with a function that just does a `return 0`.
