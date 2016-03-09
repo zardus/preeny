@@ -7,7 +7,7 @@ Preeny has the following modules:
 
 | Name | Summary |
 |------|---------|
-| delarm | Disables alarm() |
+| dealarm | Disables alarm() |
 | defork | Disables fork() |
 | deptrace | Disables ptrace() |
 | derand | Disables rand() and random() |
