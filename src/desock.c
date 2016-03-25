@@ -48,18 +48,18 @@ int preeny_socket_sync(int from, int to, int timeout)
 	}
 
 	total_n = read(from, read_buf, READ_BUF_SIZE);
-	if (n < 0)
+	if (total_n < 0)
 	{
 		strerror_r(errno, error_buf, 1024);
 		preeny_info("synchronization of fd %d to %d shutting down due to read error '%s'\n", from, to, error_buf);
 		return -1;
 	}
-	else if (n == 0 && from == 0)
+	else if (total_n == 0 && from == 0)
 	{
 		preeny_info("synchronization of fd %d to %d shutting down due to EOF\n");
 		return -1;
 	}
-	preeny_debug("read %d bytes from %d (will write to %d)\n", n, from, to);
+	preeny_debug("read %d bytes from %d (will write to %d)\n", total_n, from, to);
 
 	n = 0;
 	while (n != total_n)
