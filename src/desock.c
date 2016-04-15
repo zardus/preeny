@@ -212,21 +212,6 @@ int socket(int domain, int type, int protocol)
 
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 {
-	//initialize a sockaddr_in for the peer
-	 struct sockaddr_in peer_addr;
-	 memset(&peer_addr, '0', sizeof(struct sockaddr_in));
-
-	//Set the contents in the peer's sock_addr. 
-	//Make sure the contents will simulate a real client that connects with the intercepted server, as the server may depend on the contents to make further decisions. 
-	//The followings set-up should be fine with Nginx.
-	 peer_addr.sin_family = AF_INET;
-	 peer_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-         peer_addr.sin_port = htons(9000); 
-
-	//copy the initialized peer_addr back to the original sockaddr. Note the space for the original sockaddr, namely addr, has already been allocated
-	 memcpy(addr, &peer_addr, sizeof(struct sockaddr_in));
-
-
 	if (preeny_socket_threads_to_front[sockfd]) return dup(sockfd);
 	else return original_accept(sockfd, addr, addrlen);
 }
