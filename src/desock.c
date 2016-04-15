@@ -35,6 +35,7 @@ int preeny_socket_sync(int from, int to, int timeout)
 	int r;
 
 	r = poll(&poll_in, 1, timeout);
+
 	if (r < 0)
 	{
 		strerror_r(errno, error_buf, 1024);
@@ -48,18 +49,20 @@ int preeny_socket_sync(int from, int to, int timeout)
 	}
 
 	total_n = read(from, read_buf, READ_BUF_SIZE);
+
+	if(total_n>0)
+	{
+		printf("the conent read is %s\n", read_buf);
+	}
+
 	if (total_n < 0)
 	{
+
 		strerror_r(errno, error_buf, 1024);
-		preeny_info("synchronization of fd %d to %d shutting down due to read error '%s'\n", from, to, error_buf);
+		preeny_info("line 54 synchronization of fd %d to %d shutting down due to read error '%s'\n", from, to, error_buf);
 		return -1;
 	}
-	else if (total_n == 0 && from == 0)
-	{
-		preeny_info("synchronization of fd %d to %d shutting down due to EOF\n");
-		return -1;
-	}
-	preeny_debug("read %d bytes from %d (will write to %d)\n", total_n, from, to);
+	preeny_debug("read %d bytes from %d (will write to %d)\n", n, from, to);
 
 	n = 0;
 	while (n != total_n)
@@ -167,6 +170,8 @@ int socket(int domain, int type, int protocol)
 	int front_socket;
 	int back_socket;
 
+	printf("the socket function is called\n");
+
 	if (domain != AF_INET && domain != AF_INET6)
 	{
 		preeny_info("Ignoring non-internet socket.");
@@ -206,14 +211,37 @@ int socket(int domain, int type, int protocol)
 		perror("failed creating back-sync thread");
 		return -1;
 	}
+	printf("the number of socket created is %d and %d\n", fds[0], fds[1]);
 
 	return fds[0];
 }
 
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 {
-	if (preeny_socket_threads_to_front[sockfd]) return dup(sockfd);
-	else return original_accept(sockfd, addr, addrlen);
+
+
+	//initialize a sockaddr_in for the peer
+	 struct sockaddr_in peer_addr;
+	 memset(&peer_addr, '0', sizeof(struct sockaddr_in));
+
+	//Set the contents in the peer's sock_addr. 
+	//Make sure the contents will simulate a real client that connects with the intercepted server, as the server may depend on the contents to make further decisions. 
+	//The followings set-up should be fine with Nginx.
+	 peer_addr.sin_family = AF_INET;
+	 peer_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+         peer_addr.sin_port = htons(9000); 
+
+	//copy the initialized peer_addr back to the original sockaddr. Note the space for the original sockaddr, namely addr, has already been allocated
+	 memcpy(addr, &peer_addr, sizeof(struct sockaddr_in));
+
+	if (preeny_socket_threads_to_front[sockfd])
+	{	
+		 return dup(sockfd);
+	}
+	else 
+	{
+		return original_accept(sockfd, addr, addrlen);
+	}
 }
 
 int accept4(int sockfd, struct sockaddr *addr, socklen_t *addrlen, int flags)
@@ -223,6 +251,8 @@ int accept4(int sockfd, struct sockaddr *addr, socklen_t *addrlen, int flags)
 
 int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
+
+	printf("the bind function %d is called\n", sockfd);
 	if (preeny_socket_threads_to_front[sockfd])
 	{
 		preeny_info("Emulating bind on port %d\n", ntohs(((struct sockaddr_in*)addr)->sin_port));
@@ -236,12 +266,17 @@ int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 
 int listen(int sockfd, int backlog)
 {
-	if (preeny_socket_threads_to_front[sockfd]) return 0;
+	if (preeny_socket_threads_to_front[sockfd]) 
+	{
+		printf("the socket %d is being listened\n", sockfd);
+		return 0;
+	}
 	else return original_listen(sockfd, backlog);
 }
 
 int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
+	printf("trying to connect to the server\n");
 	if (preeny_socket_threads_to_front[sockfd]) return 0;
 	else return original_connect(sockfd, addr, addrlen);
 }
