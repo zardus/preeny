@@ -55,7 +55,7 @@ Let's say that you have an application that you want to interact with on the com
 You can do:
 
 ```bash
-make LD_PRELOAD=x86_64-linux-gnu/desock.so:x86_64-linux-gnu/defork.so:x86_64-linux-gnu/dealarm.so \
+LD_PRELOAD=x86_64-linux-gnu/desock.so:x86_64-linux-gnu/defork.so:x86_64-linux-gnu/dealarm.so \
   ~/code/security/codegate/2015/rodent/rodent
 ```
 
