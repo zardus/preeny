@@ -224,8 +224,7 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
          peer_addr.sin_port = htons(9000); 
 
 	//copy the initialized peer_addr back to the original sockaddr. Note the space for the original sockaddr, namely addr, has already been allocated
-	 memcpy(addr, &peer_addr, sizeof(struct sockaddr_in));
-
+	if (addr) memcpy(addr, &peer_addr, sizeof(struct sockaddr_in));
 
 	if (preeny_socket_threads_to_front[sockfd]) return dup(sockfd);
 	else return original_accept(sockfd, addr, addrlen);
