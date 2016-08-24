@@ -233,7 +233,7 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 
 int accept4(int sockfd, struct sockaddr *addr, socklen_t *addrlen, int flags)
 {
-       accept(sockfd, addr, addrlen);
+       return accept(sockfd, addr, addrlen);
 }
 
 int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
