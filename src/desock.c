@@ -56,7 +56,7 @@ int preeny_socket_sync(int from, int to, int timeout)
 	}
 	else if (total_n == 0 && from == 0)
 	{
-		preeny_info("synchronization of fd %d to %d shutting down due to EOF\n");
+		preeny_info("synchronization of fd %d to %d shutting down due to EOF\n", from, to);
 		return -1;
 	}
 	preeny_debug("read %d bytes from %d (will write to %d)\n", total_n, from, to);
