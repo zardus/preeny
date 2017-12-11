@@ -17,6 +17,7 @@ Preeny has the following modules:
 | ensock | The opposite of desock -- like an LD\_PRELOAD version of socat! |
 | desrand | Does tricky things with srand() to control randomness. |
 | detime | Makes time() always return the same value. |
+| desleep | Makes sleep() and usleep() do nothing. |
 | mallocwatch | When ltrace is inconvenient, mallocwatch provides info on heap operations. |
 | writeout | Some binaries write() to fd 0, expecting it to be a two-way socket. This makes that work (by redirecting to fd 1). |
 | patch | Patches programs at load time. |
