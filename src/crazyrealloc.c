@@ -43,14 +43,12 @@ void *realloc(void *ptr, size_t size)
 		return r;
 	} else {
 		if (r) {
-
 			void *rm = malloc(size);
 			preeny_info("malloc(%u) == %p\n", size, rm);
 
-			memcpy(rm, r, size);  // if you use ASAN you're gonna
-								  // get uninitialized read here
-								  // probably
+			memcpy(rm, r, size);
 			preeny_info("memcpy(%p, %p, %u)\n", rm, r, size);
+
 			original_free(r);
 			preeny_info("free(%p)\n", r);
 
