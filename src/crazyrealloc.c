@@ -38,24 +38,28 @@ void *realloc(void *ptr, size_t size)
 {
 	void *r = original_realloc(ptr, size);
 	preeny_info("realloc(%p, %d) == %p\n", ptr, size, r);
-
-	if (ptr) {
-
-		void *rm = malloc(size);
-		preeny_info("malloc(%u) == %p\n", size, rm);
-
-		memcpy(rm, r, size);  // if you use ASAN you're gonna
-					   		  // get uninitialized read here
-							  // probably
-		preeny_info("memcpy(%p, %p, %u)\n", rm, r, size);
-		original_free(r);
-		preeny_info("free(%p)\n", r);
-
-		preeny_info("return %p\n", rm);
-		return rm;
-
-	} else {
+	if (r != ptr) {
 		preeny_info("return %p\n", r);
 		return r;
+	} else {
+		if (r) {
+
+			void *rm = malloc(size);
+			preeny_info("malloc(%u) == %p\n", size, rm);
+
+			memcpy(rm, r, size);  // if you use ASAN you're gonna
+								  // get uninitialized read here
+								  // probably
+			preeny_info("memcpy(%p, %p, %u)\n", rm, r, size);
+			original_free(r);
+			preeny_info("free(%p)\n", r);
+
+			preeny_info("return %p\n", rm);
+			return rm;
+
+		} else {
+			preeny_info("return %p\n", r);
+			return r;
+		}
 	}
 }
