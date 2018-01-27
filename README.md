@@ -22,6 +22,7 @@ Preeny has the following modules:
 | writeout | Some binaries write() to fd 0, expecting it to be a two-way socket. This makes that work (by redirecting to fd 1). |
 | patch | Patches programs at load time. |
 | startstop | Sends SIGSTOP to itself on startup, to suspend the process. |
+| crazyrealloc | ensures that whatever is being reallocated is always moved to a new location in memory, thus free()ing the old. |
 
 ## Building
 

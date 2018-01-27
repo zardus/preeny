@@ -34,6 +34,7 @@ desock_dup.so: CFLAGS+=-ldl
 desrand.so: CFLAGS+=-ldl
 deptrace.so: CFLAGS+=-ldl
 mallocwatch.so: CFLAGS+=-ldl
+crazyrealloc.so: CFLAGS+=-ldl
 patch.so: CFLAGS+=-ldl -lini_config
 
 %.so: %.c $(COMMON_DEPS)
