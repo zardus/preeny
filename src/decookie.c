@@ -55,5 +55,5 @@ canary_t read_canary()
 __attribute__((constructor)) void preeny_cookie_dump()
 {
     preeny_logging_init(); //This haven't been called when we get here so env flags are not respected unless called manually
-	preeny_info(FMT, read_canary());
+    preeny_info(FMT, read_canary());
 }
