@@ -25,6 +25,7 @@ Preeny has the following modules:
 | startstop | Sends SIGSTOP to itself on startup, to suspend the process. |
 | crazyrealloc | ensures that whatever is being reallocated is always moved to a new location in memory, thus free()ing the old. |
 | deuid | Change the UID and effective UID of a process |
+| eofkiller | Exit on EOF on several read functions |
 
 ## Building
 
