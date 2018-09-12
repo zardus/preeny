@@ -21,11 +21,12 @@ Preeny has the following modules:
 | mallocwatch | When ltrace is inconvenient, mallocwatch provides info on heap operations. |
 | writeout | Some binaries write() to fd 0, expecting it to be a two-way socket. This makes that work (by redirecting to fd 1). |
 | patch | Patches programs at load time. |
-| decookie | Dumps stack canary on startup. |
 | startstop | Sends SIGSTOP to itself on startup, to suspend the process. |
 | crazyrealloc | ensures that whatever is being reallocated is always moved to a new location in memory, thus free()ing the old. |
 | deuid | Change the UID and effective UID of a process |
 | eofkiller | Exit on EOF on several read functions |
+| getcanary | Dumps the canary on program startup (x86 and amd64 only at the moment). |
+| setcanary | Overwrites the canary with a user-provided one on program startup (amd64-only at the moment). |
 
 ## Building
 
