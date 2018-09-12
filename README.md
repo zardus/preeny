@@ -24,6 +24,7 @@ Preeny has the following modules:
 | decookie | Dumps stack canary on startup. |
 | startstop | Sends SIGSTOP to itself on startup, to suspend the process. |
 | crazyrealloc | ensures that whatever is being reallocated is always moved to a new location in memory, thus free()ing the old. |
+| setcanary | Overwrites the canary with a user-provided one on program startup (amd64-only at the moment). |
 
 ## Building
 
