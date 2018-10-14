@@ -80,3 +80,6 @@ add_executable(test_realloc test/realloc.c)
 add_executable(test_sleep test/sleep.c)
 add_executable(test_sock test/sock.c)
 add_executable(test_uid test/uid.c)
+
+# Scripts
+file(COPY ${CMAKE_SOURCE_DIR}/test/run_tests.sh DESTINATION ${CMAKE_BINARY_DIR})
