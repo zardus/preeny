@@ -49,6 +49,8 @@ canary_t read_canary()
     return val;
 }
 
+void preeny_logging_init();
+
 //
 // Dump stack cookie on startup
 //
