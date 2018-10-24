@@ -48,11 +48,11 @@ It'll create a directory named after the OS and architecture type, then put the 
 
 If you need to build 32-bit x86 preeny libs on a 64-bit x86 host, you can do:
 
-    CFLAGS=-m32 make
+    make ARCH=i386
 
 Alternatively, if you want to utilize a cross-compiler, pass the `CC` variable to `make`.  For example:
 
-    CC=mips-malta-linux-gnu-gcc make -i
+    make -i CC=mips-malta-linux-gnu-gcc
 
 Because some modules fail in cross-complilation, it's recommended to use `make -i`.
 
