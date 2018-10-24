@@ -3,13 +3,13 @@
 all: dist tests
 
 dist:
-	make -C src clean
-	make -C src dist
+	$(MAKE) -C src clean
+	$(MAKE) -C src dist
 
 tests:
-	make -C tests
+	$(MAKE) -C tests
 
 clean:
-	make -C src clean
-	make -C tests clean
+	$(MAKE) -C src clean
+	$(MAKE) -C tests clean
 	rm -rf *-*-*
