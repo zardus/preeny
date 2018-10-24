@@ -13,3 +13,6 @@ clean:
 	$(MAKE) -C src clean
 	$(MAKE) -C tests clean
 	rm -rf *-*-*
+
+archinfo:
+	$(MAKE) -C src archinfo
