@@ -25,7 +25,7 @@ __attribute__((constructor)) void preeny_socketize()
 	int fd = socket(AF_INET, SOCK_STREAM, 0);
 	int conn_fd;
 	struct sockaddr_in serv_addr, client_addr;
-	int client_len = sizeof(client_addr);
+	unsigned int client_len = sizeof(client_addr);
 
 	if (fd < 0)
 	{

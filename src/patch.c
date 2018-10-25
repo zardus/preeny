@@ -101,12 +101,15 @@ int preeny_patch_apply_patch(void *target, void *content, int length)
 	{
 		strerror_r(errno, error_str, 1024);
 		preeny_error("error '%s' making pages containing %d bytes at %p writeable\n", error_str, length, target);
+		return error;
 	}
 
 	preeny_debug("writing %d bytes at %p\n", length, target);
 	memcpy(target, content, length);
 
 	preeny_debug("wrote %d bytes at %p\n", length, target);
+
+	return 0;
 }
 
 int preeny_patch_apply_file(char *conf_file, struct collection_item *patch)
@@ -149,6 +152,8 @@ int preeny_patch_apply_file(char *conf_file, struct collection_item *patch)
 		free(content);
 		if (error > 0) { preeny_error("error applying patch section %s from %s\n", section, conf_file); return -1; }
 	}
+
+	return 0;
 }
 
 __attribute__((constructor)) void preeny_patch_program()

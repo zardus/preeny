@@ -34,7 +34,7 @@ int close(int sockfd)
 	}
 	else
 	{
-		original_close(sockfd);
+		return original_close(sockfd);
 	}
 }
 
@@ -47,7 +47,7 @@ int dup2(int old, int new)
 	}
 	else
 	{
-		original_dup2(old, new);
+		return original_dup2(old, new);
 	}
 }
 
