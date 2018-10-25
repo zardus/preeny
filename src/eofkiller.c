@@ -94,7 +94,7 @@ int __isoc99_fscanf(FILE *stream, const char *format, ...) {
 }
 
 __attribute__((constructor))
-static void main() {
+int main() {
 	scanf_eof_on_malformed = getenv("SCANF_EOF_ON_MALFORMED") != NULL;
 
 	char *fd_str = getenv("EOF_HOOK_FD");
@@ -102,4 +102,6 @@ static void main() {
 
 	o_vscanf = dlsym(RTLD_NEXT, "vscanf");
 	o_vfscanf = dlsym(RTLD_NEXT, "vfscanf");
+
+	return 0;
 }

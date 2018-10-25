@@ -113,7 +113,6 @@ __attribute__((destructor)) void preeny_desock_shutdown()
 
 void preeny_socket_sync_loop(int from, int to)
 {
-	char error_buf[1024];
 	int r;
 
 	preeny_debug("starting forwarding from %d to %d!\n", from, to);

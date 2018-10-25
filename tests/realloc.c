@@ -15,6 +15,9 @@ Aborted
 int main()
 {
 	char *s = malloc((size_t)10);
-	realloc(s, (size_t)15);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+	realloc(s, (size_t)15); // ignore return value. s might be invalidated by this call.
+#pragma GCC diagnostic pop
 	free(s);
 }
