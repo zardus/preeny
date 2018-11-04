@@ -40,22 +40,25 @@ If you're not running a debian, Arch, or Fedora based distro, you've brought the
 
 You can build preeny by doing:
 
-    mkdir build && cd build && cmake .. && make
+    make
 
-It'll build the libraries in ./build/lib
-You can also simply run ./do-build.sh for the same result
+It'll create a directory named after the OS and architecture type, then put the libraries there.
 
-## Cross-compilation
+### Cross-compilation
 
 If you need to build 32-bit x86 preeny libs on a 64-bit x86 host, you can do:
 
     make ARCH=i386
 
-Alternatively, if you want to utilize a cross-compiler, pass the `CC` variable to `cmake`.  For example:
+Alternatively, if you want to utilize a cross-compiler, pass the `CC` variable to `make`.  For example:
 
     make -i CC=mips-malta-linux-gnu-gcc
 
 Because some modules fail in cross-complilation, it's recommended to use `make -i`.
+
+### CMake
+
+You can also build the project with cmake. Look at the cmake-build-*.sh scripts for example on how.
 
 ## Usage
 
@@ -63,7 +66,7 @@ Let's say that you have an application that you want to interact with on the com
 You can do:
 
 ```bash
-LD_PRELOAD=build_x64/lib/libdesock.so:build_x64/lib/libdefork.so:build_x64/lib/libdealarm.so \
+LD_PRELOAD=x86_64-linux-gnu/desock.so:x86_64-linux-gnu/defork.so:x86_64-linux-gnu/dealarm.so \
   ~/code/security/codegate/2015/rodent/rodent
 ```
 
@@ -71,10 +74,10 @@ Pretty awesome stuff!  Of course, you can pick and choose which preloads you wan
 
 ```bash
 echo 'No fork or alarm for you, but I still want to netcat!'
-LD_PRELOAD=build_x64/lib/libdefork.so:build_x64/lib/libdealarm.so ~/code/security/codegate/2015/rodent/rodent
+LD_PRELOAD=x86_64-linux-gnu/defork.so:x86_64-linux-gnu/dealarm.so ~/code/security/codegate/2015/rodent/rodent
 
 echo 'Ok, go ahead and fork, but no alarm. Time to brute force that canary.'
-LD_PRELOAD=build_x64/lib/libdealarm.so ~/code/security/codegate/2015/rodent/rodent
+LD_PRELOAD=x86_64-linux-gnu/dealarm.so ~/code/security/codegate/2015/rodent/rodent
 ```
 
 Have fun!
@@ -99,26 +102,26 @@ Preeny ships with two modules to help: `derand` and `desrand`.
 
 ```bash
 # this will return 42 on each rand() call
-LD_PRELOAD=build_x64/lib/libderand.so tests/rand
+LD_PRELOAD=x86_64-linux-gnu/derand.so tests/rand
 
 # this will return 1337 on each rand() call
-RAND=1337 LD_PRELOAD=build_x64/lib/libderand.so tests/rand
+RAND=1337 LD_PRELOAD=x86_64-linux-gnu/derand.so tests/rand
 ```
 
 For slightly more complex things, `desrand.so` lets you override the `srand` function to your liking.
 
 ```bash
 # this simply sets the seed to 42
-LD_PRELOAD=build_x64/lib/libdesrand.so tests/rand
+LD_PRELOAD=x86_64-linux-gnu/desrand.so tests/rand
 
 # this sets the seed to 1337
-SEED=1337 LD_PRELOAD=build_x64/lib/libdesrand.so tests/rand
+SEED=1337 LD_PRELOAD=x86_64-linux-gnu/desrand.so tests/rand
 
 # this sets the seed to such that the first "rand() % 128" will be 10
-WANT=10 MOD=128 LD_PRELOAD=build_x64/lib/libdesrand.so tests/rand
+WANT=10 MOD=128 LD_PRELOAD=x86_64-linux-gnu/desrand.so tests/rand
 
 # finally, this makes the *third* "rand() % 128" be 10
-SKIP=2 WANT=10 MOD=128 LD_PRELOAD=build_x64/lib/libdesrand.so tests/rand
+SKIP=2 WANT=10 MOD=128 LD_PRELOAD=x86_64-linux-gnu/desrand.so tests/rand
 ```
 
 `desrand` does all this by brute-forcing the seed value, so keep in mind that startup speed will get considerably slower as `MOD` increases.
@@ -154,7 +157,7 @@ content='4141414141'
 [world]
 address=0x4005ca
 content='6161616161'
-# PATCH="hello.p" LD_PRELOAD=build_x64/lib/libpatch.so tests/hello 
+# PATCH="hello.p" LD_PRELOAD=x86_64-linux-gnu/patch.so tests/hello 
 --- section hello in file hello.p specifies 5-byte patch at 0x4005c4
 --- section world in file hello.p specifies 5-byte patch at 0x4005ca
 AAAAA aaaaa!
