@@ -1,17 +1,17 @@
-.PHONY: all dist tests clean
+.PHONY: all dist test clean
 
-all: dist tests
+all: dist test
 
 dist:
 	$(MAKE) -C src clean
 	$(MAKE) -C src dist
 
-tests:
-	$(MAKE) -C tests
+test:
+	$(MAKE) -C test
 
 clean:
 	$(MAKE) -C src clean
-	$(MAKE) -C tests clean
+	$(MAKE) -C test clean
 	rm -rf *-*-*
 
 archinfo:
