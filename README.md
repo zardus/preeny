@@ -44,7 +44,7 @@ You can build preeny by doing:
 
 It'll create a directory named after the OS and architecture type, then put the libraries there.
 
-## Cross-compilation
+### Cross-compilation
 
 If you need to build 32-bit x86 preeny libs on a 64-bit x86 host, you can do:
 
@@ -55,6 +55,10 @@ Alternatively, if you want to utilize a cross-compiler, pass the `CC` variable t
     make -i CC=mips-malta-linux-gnu-gcc
 
 Because some modules fail in cross-complilation, it's recommended to use `make -i`.
+
+### CMake
+
+You can also build the project with cmake. Look at the cmake-build-*.sh scripts for example on how.
 
 ## Usage
 
