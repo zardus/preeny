@@ -12,7 +12,7 @@ test:
 clean:
 	$(MAKE) -C src clean
 	$(MAKE) -C test clean
-	rm -rf *-*-*
+	rm -rf *-*-*/
 
 archinfo:
 	$(MAKE) -C src archinfo
