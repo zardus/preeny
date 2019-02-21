@@ -22,6 +22,8 @@
 #define PREENY_SOCKET(x) (x+PREENY_SOCKET_OFFSET)
 
 int preeny_desock_shutdown_flag = 0;
+int preeny_desock_did_accept = 0;
+
 pthread_t *preeny_socket_threads_to_front[PREENY_MAX_FD] = { 0 };
 pthread_t *preeny_socket_threads_to_back[PREENY_MAX_FD] = { 0 };
 
@@ -211,6 +213,10 @@ int socket(int domain, int type, int protocol)
 
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 {
+	if (preeny_desock_did_accept)
+		exit(0);
+	preeny_desock_did_accept = 1;
+
 	//initialize a sockaddr_in for the peer
 	 struct sockaddr_in peer_addr;
 	 memset(&peer_addr, '0', sizeof(struct sockaddr_in));
