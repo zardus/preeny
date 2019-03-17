@@ -14,7 +14,7 @@ int (*original__libc_start_main)(
 	int (*init)(int, char **, char **), void (*fini)(void),
 	void (*ldso_fini)(void));
 
-__attribute__((constructor)) void preeny_desock_dup_orig()
+__attribute__((constructor)) void preeny_deexec_dup_orig()
 {
 	original__libc_start_main = dlsym(RTLD_NEXT, "__libc_start_main");
 }
