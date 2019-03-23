@@ -60,6 +60,7 @@ desock.so: CFLAGS+=-lpthread
 desock_dup.so: CFLAGS+=-ldl
 desrand.so: CFLAGS+=-ldl
 deptrace.so: CFLAGS+=-ldl
+deexec.so: CFLAGS+=-lseccomp
 mallocwatch.so: CFLAGS+=-ldl
 crazyrealloc.so: CFLAGS+=-ldl
 patch.so: CFLAGS+=-ldl -lini_config
