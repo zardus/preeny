@@ -35,6 +35,11 @@
 #define canary_t     uint32_t
 #define INSN_READ    "movl %%gs:0x14, %0;"
 #define FMT          "Found canary: %#x\n"
+
+#elif __arm__
+#define canary_t     uint32_t
+#define INSN_READ    "ldr r0, =__stack_chk_guard; ldr r0, [r0]; mov %0, r0;"
+#define FMT          "Found canary: %#x\n"
 #endif
 
 canary_t read_canary()
