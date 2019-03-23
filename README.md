@@ -36,6 +36,12 @@ preeny's patch functionality uses `libini_config` to read `.ini` files.
 * On Arch-based distros, you can install `ding-libs`.
 * On Fedora-based distros, you can install `libini_config-devel`.
 
+Also deexec uses `seccomp` to setup a filter to blacklist `execve` like calls.
+
+* On debian-based distros, you can install `libseccomp-dev`.
+* On Arch-based distros, you can install `libseccomp`.
+* On Fedora-based distros, you can install `libseccomp-devel`.
+
 If you're not running a debian, Arch, or Fedora based distro, you've brought the pain upon yourself.
 
 You can build preeny by doing:
@@ -147,9 +153,9 @@ Patches are specified in a `.ini` format, and applied by including `patch.so` in
 For example:
 
 ```ShellSession
-# tests/hello 
+# tests/hello
 Hello world!
-# cat hello.p 
+# cat hello.p
 [hello]
 address=0x4005c4
 content='4141414141'
@@ -157,7 +163,7 @@ content='4141414141'
 [world]
 address=0x4005ca
 content='6161616161'
-# PATCH="hello.p" LD_PRELOAD=x86_64-linux-gnu/patch.so tests/hello 
+# PATCH="hello.p" LD_PRELOAD=x86_64-linux-gnu/patch.so tests/hello
 --- section hello in file hello.p specifies 5-byte patch at 0x4005c4
 --- section world in file hello.p specifies 5-byte patch at 0x4005ca
 AAAAA aaaaa!
