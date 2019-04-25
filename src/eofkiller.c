@@ -61,6 +61,16 @@ int scanf(const char *format, ...) {
 	return handle_scanf_result(result);
 }
 
+#ifdef __isoc99_scanf
+int __isoc99_scanf(const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+	int result = o_vscanf(format, args);
+    va_end(args);
+	return handle_scanf_result(result);
+}
+#endif
+
 typedef int (*vfscanf_t)(FILE *stream, const char *format, va_list ap);
 vfscanf_t o_vfscanf;
 int fscanf(FILE *stream, const char *format, ...) {
@@ -73,6 +83,19 @@ int fscanf(FILE *stream, const char *format, ...) {
 	else
 		return result;
 }
+
+#ifdef __isoc99_fscanf
+int __isoc99_fscanf(FILE *stream, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+	int result = o_vfscanf(stream, format, args);
+    va_end(args);
+    if (fileno(stream) == hook_fd)
+		return handle_scanf_result(result);
+	else
+		return result;
+}
+#endif
 
 __attribute__((constructor))
 int main() {
