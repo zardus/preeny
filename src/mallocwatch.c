@@ -27,8 +27,8 @@ __attribute__((constructor)) void preeny_mallocwatch_orig()
 
 void *malloc(size_t size)
 {
-    if(!original_malloc)
-        preeny_mallocwatch_orig();
+    	if(!original_malloc)
+        	preeny_mallocwatch_orig();
 
 	void *r = original_malloc(size);
 	if(malloc_hook_active) {
@@ -41,8 +41,8 @@ void *malloc(size_t size)
 
 void free(void *ptr)
 {
-    if(!original_free)
-        preeny_mallocwatch_orig();
+    	if(!original_free)
+        	preeny_mallocwatch_orig();
 
 	original_free(ptr);
 	if(free_hook_active) {
@@ -54,8 +54,8 @@ void free(void *ptr)
 
 void *calloc(size_t nmemb, size_t size)
 {
-    if(!original_calloc)
-        preeny_mallocwatch_orig();
+    	if(!original_calloc)
+        	preeny_mallocwatch_orig();
 
 	void *r = original_calloc(nmemb, size);
 	if(calloc_hook_active) {
@@ -68,8 +68,8 @@ void *calloc(size_t nmemb, size_t size)
 
 void *realloc(void *ptr, size_t size)
 {
-    if(!original_realloc)
-        preeny_mallocwatch_orig();
+    	if(!original_realloc)
+        	preeny_mallocwatch_orig();
 
 	void *r = original_realloc(ptr, size);
 	if(realloc_hook_active) {
