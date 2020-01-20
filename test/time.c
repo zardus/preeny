@@ -8,7 +8,7 @@
 
 int main()
 {
-	printf("Time: %d\n", time(0));
+	printf("Time: %ld\n", time(0));
 #ifdef __unix__
     struct timeval tv;
     struct timezone tz;
