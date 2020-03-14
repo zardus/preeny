@@ -142,6 +142,7 @@ void *preeny_socket_sync_to_front(void *fd)
 	int front_fd = (int)fd;
 	int back_fd = PREENY_SOCKET(front_fd);
 	preeny_socket_sync_loop(0, back_fd);
+	shutdown(back_fd, SHUT_WR);
 	return NULL;
 }
 
