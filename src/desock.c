@@ -22,7 +22,7 @@
 #define PREENY_SOCKET(x) (x+PREENY_SOCKET_OFFSET)
 
 int preeny_desock_shutdown_flag = 0;
-int preeny_desock_did_accept = 0;
+int preeny_desock_accepted_sock = -1;
 
 pthread_t *preeny_socket_threads_to_front[PREENY_MAX_FD] = { 0 };
 pthread_t *preeny_socket_threads_to_back[PREENY_MAX_FD] = { 0 };
@@ -154,6 +154,8 @@ int (*original_bind)(int, const struct sockaddr *, socklen_t);
 int (*original_listen)(int, int);
 int (*original_accept)(int, struct sockaddr *, socklen_t *);
 int (*original_connect)(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+int (*original_close)(int fd);
+int (*original_shutdown)(int sockfd, int how);
 __attribute__((constructor)) void preeny_desock_orig()
 {
 	original_socket = dlsym(RTLD_NEXT, "socket");
@@ -161,6 +163,8 @@ __attribute__((constructor)) void preeny_desock_orig()
 	original_accept = dlsym(RTLD_NEXT, "accept");
 	original_bind = dlsym(RTLD_NEXT, "bind");
 	original_connect = dlsym(RTLD_NEXT, "connect");
+	original_close = dlsym(RTLD_NEXT, "close");
+	original_shutdown = dlsym(RTLD_NEXT, "shutdown");
 }
 
 int socket(int domain, int type, int protocol)
@@ -214,9 +218,11 @@ int socket(int domain, int type, int protocol)
 
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 {
-	if (preeny_desock_did_accept)
-		exit(0);
-	preeny_desock_did_accept = 1;
+	if (preeny_desock_accepted_sock >= 0)
+	{
+                errno = ECONNRESET;
+		return -1;
+	}
 
 	//initialize a sockaddr_in for the peer
 	 struct sockaddr_in peer_addr;
@@ -232,7 +238,11 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 	//copy the initialized peer_addr back to the original sockaddr. Note the space for the original sockaddr, namely addr, has already been allocated
 	if (addr) memcpy(addr, &peer_addr, sizeof(struct sockaddr_in));
 
-	if (preeny_socket_threads_to_front[sockfd]) return dup(sockfd);
+	if (preeny_socket_threads_to_front[sockfd])
+	{
+		preeny_desock_accepted_sock = dup(sockfd);
+		return preeny_desock_accepted_sock;
+	}
 	else return original_accept(sockfd, addr, addrlen);
 }
 
@@ -264,4 +274,18 @@ int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
 	if (preeny_socket_threads_to_front[sockfd]) return 0;
 	else return original_connect(sockfd, addr, addrlen);
+}
+
+int close(int fd) {
+	if (preeny_desock_accepted_sock != -1 && preeny_desock_accepted_sock == fd)
+		exit(0);
+
+	return original_close(fd);
+}
+
+int shutdown(int sockfd, int how) {
+	if (preeny_desock_accepted_sock != -1 && preeny_desock_accepted_sock == sockfd)
+		exit(0);
+
+	return original_shutdown(sockfd, how);
 }
