@@ -38,7 +38,7 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
 		tz->tz_minuteswest = minwest_str ? atoi(minwest_str) : 0;
 		tz->tz_dsttime = dst_str ? atoi(dst_str) : 0;
 
-		preeny_debug("gettimeofday tz frozen at -%d minm, DST: %d\n", tz->tz_minuteswest, tv->tv_usec, tz->tz_dsttime);
+		preeny_debug("gettimeofday tz frozen at -%d minm, DST: %d\n", tz->tz_minuteswest, tz->tz_dsttime);
 	}
 
 	return 0;
