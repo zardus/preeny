@@ -19,6 +19,8 @@
 #define PREENY_SOCKET_OFFSET 500
 #define READ_BUF_SIZE 65536
 
+#define PREENY_SIN_PORT 9000
+
 #define PREENY_SOCKET(x) (x+PREENY_SOCKET_OFFSET)
 
 int preeny_desock_shutdown_flag = 0;
@@ -156,6 +158,7 @@ int (*original_accept)(int, struct sockaddr *, socklen_t *);
 int (*original_connect)(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
 int (*original_close)(int fd);
 int (*original_shutdown)(int sockfd, int how);
+int (*original_getsockname)(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 __attribute__((constructor)) void preeny_desock_orig()
 {
 	original_socket = dlsym(RTLD_NEXT, "socket");
@@ -165,6 +168,7 @@ __attribute__((constructor)) void preeny_desock_orig()
 	original_connect = dlsym(RTLD_NEXT, "connect");
 	original_close = dlsym(RTLD_NEXT, "close");
 	original_shutdown = dlsym(RTLD_NEXT, "shutdown");
+	original_getsockname = dlsym(RTLD_NEXT, "getsockname");
 }
 
 int socket(int domain, int type, int protocol)
@@ -233,7 +237,7 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
 	//The followings set-up should be fine with Nginx.
 	 peer_addr.sin_family = AF_INET;
 	 peer_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-         peer_addr.sin_port = htons(9000); 
+         peer_addr.sin_port = htons(PREENY_SIN_PORT);
 
 	//copy the initialized peer_addr back to the original sockaddr. Note the space for the original sockaddr, namely addr, has already been allocated
 	if (addr) memcpy(addr, &peer_addr, sizeof(struct sockaddr_in));
@@ -288,4 +292,27 @@ int shutdown(int sockfd, int how) {
 		exit(0);
 
 	return original_shutdown(sockfd, how);
+}
+
+int getsockname(int sockfd, struct sockaddr *addr, socklen_t *addrlen) {
+	struct sockaddr_in target;
+	socklen_t copylen = sizeof(target);
+
+	if (!preeny_socket_threads_to_front[sockfd])
+		return original_getsockname(sockfd, addr, addrlen);
+
+	if (!addr || !addrlen)
+		return -1;
+
+	if (*addrlen < sizeof(target))
+		copylen = *addrlen;
+
+	target.sin_family = AF_INET;
+	target.sin_addr.s_addr = htonl(INADDR_ANY);
+	target.sin_port = htons(PREENY_SIN_PORT);
+
+	memcpy(addr, &target, copylen);
+	*addrlen = copylen;
+
+	return 0;
 }
