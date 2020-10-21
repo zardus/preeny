@@ -73,6 +73,11 @@ target_link_libraries(getcanary common-preeny dl)
 add_library(setcanary SHARED src/setcanary.c)
 target_link_libraries(setcanary common-preeny dl)
 
+# SetSTDIN
+add_library(setstdin SHARED src/setstdin.c)
+target_link_libraries(setstdin common-preeny dl)
+
+
 # Tests
 add_executable(test_hello test/hello.c)
 add_executable(test_rand test/rand.c)
@@ -80,6 +85,11 @@ add_executable(test_realloc test/realloc.c)
 add_executable(test_sleep test/sleep.c)
 add_executable(test_sock test/sock.c)
 add_executable(test_uid test/uid.c)
+add_executable(test_setstdin_read  test/setstdin_read.c)
+add_executable(test_setstdin_fread test/setstdin_fread.c)
+add_executable(test_setstdin_getc  test/setstdin_getc.c)
+
+
 
 # Scripts
 file(COPY ${CMAKE_SOURCE_DIR}/test/run_tests.sh DESTINATION ${CMAKE_BINARY_DIR})

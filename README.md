@@ -27,6 +27,7 @@ Preeny has the following modules:
 | eofkiller | Exit on EOF on several read functions |
 | getcanary | Dumps the canary on program startup (x86 and amd64 only at the moment). |
 | setcanary | Overwrites the canary with a user-provided one on program startup (amd64-only at the moment). |
+| setstdin  | Sets user defined STDIN data instead of real one, overriding `read`, `fread`, `fgetc`, `getc` and `getchar` calls. Read [here](#STDIN_substitution) for more info |
 
 ## Building
 
@@ -171,3 +172,24 @@ AAAAA aaaaa!
 ```
 
 Having different patch files and just enabling/disabling them via preload is oftentimes easier than modifying the underlying binary.
+
+## STDIN substitution
+
+`setstdin.so` allows to replace `STDIN` with user defined data. It overrides `read`, `fread`, `fgetc`, `getc` and `getchar` calls, and
+return user defined data when binary asks for some `STDIN`.
+
+`setstdin` first tries to get user defined data form `PREENY_STDIN` environment variabe, if this variable is not defined, it tries to read data
+from file, defined in `PREENY_STDIN_FILENAME` environment variable. If both are not defined, `setstdin` uses some default value.
+
+```ShellSession
+$PREENY_STDIN=New_message LD_PRELOAD=src/setstdin.so test/setstdin_read
+N|ew|_me|ssag|e|
+
+$ echo "Some other message" > tmp_file
+$ PREENY_STDIN_FILENAME=tmp_file LD_PRELOAD=src/setstdin.so test/setstdin_getc
+S|o|m|e| |o|t|h|e|r| |m|e|s|s|a|g|e|
+
+$ LD_PRELOAD=src/setstdin.so test/setstdin_fread
+D|ef|aul|t se|tstdi|n valu|e. Plea|se set P|REENY_STD|IN or PREE|NY_STDIN_FI|LENAME envir|onment variab|les to set you|r own value
+
+```
