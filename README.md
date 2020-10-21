@@ -182,7 +182,7 @@ return user defined data when binary asks for some `STDIN`.
 from file, defined in `PREENY_STDIN_FILENAME` environment variable. If both are not defined, `setstdin` uses some default value.
 
 ```ShellSession
-$PREENY_STDIN=New_message LD_PRELOAD=src/setstdin.so test/setstdin_read
+$ PREENY_STDIN=New_message LD_PRELOAD=src/setstdin.so test/setstdin_read
 N|ew|_me|ssag|e|
 
 $ echo "Some other message" > tmp_file
