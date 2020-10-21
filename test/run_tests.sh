@@ -1,4 +1,7 @@
 #!/bin/sh
+
+#This script is designed to be used with cmake builds.
+
 export PREENY_DEBUG=1
 export PREENY_INFO=1
 export PREENY_ERROR=1
@@ -21,3 +24,8 @@ echo "TEST" | LD_PRELOAD=lib/libdesock.so ./bin/test_sock
 
 # Canary
 LD_PRELOAD=lib/libgetcanary.so ./bin/test_hello
+
+# SetSTDIN
+LD_PRELOAD=lib/libsetstdin.so ./bin/test_setstdin_fread
+LD_PRELOAD=lib/libsetstdin.so ./bin/test_setstdin_getc
+LD_PRELOAD=lib/libsetstdin.so ./bin/test_setstdin_read
