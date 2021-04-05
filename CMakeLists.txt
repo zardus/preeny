@@ -77,6 +77,9 @@ target_link_libraries(setcanary common-preeny dl)
 add_library(setstdin SHARED src/setstdin.c)
 target_link_libraries(setstdin common-preeny dl)
 
+# nowrite
+add_library(nowrite SHARED src/nowrite.c)
+target_link_libraries(nowrite common-preeny dl)
 
 # Tests
 add_executable(test_hello test/hello.c)
@@ -88,6 +91,7 @@ add_executable(test_uid test/uid.c)
 add_executable(test_setstdin_read  test/setstdin_read.c)
 add_executable(test_setstdin_fread test/setstdin_fread.c)
 add_executable(test_setstdin_getc  test/setstdin_getc.c)
+add_executable(test_nowrite test/nowrite.c)
 
 
 
