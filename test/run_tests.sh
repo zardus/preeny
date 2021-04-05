@@ -29,3 +29,6 @@ LD_PRELOAD=lib/libgetcanary.so ./bin/test_hello
 LD_PRELOAD=lib/libsetstdin.so ./bin/test_setstdin_fread
 LD_PRELOAD=lib/libsetstdin.so ./bin/test_setstdin_getc
 LD_PRELOAD=lib/libsetstdin.so ./bin/test_setstdin_read
+
+# nowrite
+LD_PRELOAD=lib/libnowrite.so ./bin/test_nowrite

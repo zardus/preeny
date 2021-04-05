@@ -66,6 +66,7 @@ crazyrealloc.so: CFLAGS+=-ldl
 patch.so: CFLAGS+=-ldl -lini_config
 eofkiller.so: CFLAGS+=-ldl
 setstdin.so: CFLAGS+=-ldl
+nowrite.so: CFLAGS+=-ldl
 
 %.so: %.c $(COMMON_DEPS)
 	$(CC) $^ -o $@ -shared -fPIC $(CFLAGS)
