@@ -1,5 +1,10 @@
+#define _GNU_SOURCE
 #include <assert.h>
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/fcntl.h>
+#include <dlfcn.h>
 
 int main()
 {
