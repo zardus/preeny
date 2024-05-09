@@ -27,7 +27,7 @@ Preeny has the following modules:
 | eofkiller | Exit on EOF on several read functions |
 | getcanary | Dumps the canary on program startup (x86 and amd64 only at the moment). |
 | setcanary | Overwrites the canary with a user-provided one on program startup (amd64-only at the moment). |
-| setstdin  | Sets user defined STDIN data instead of real one, overriding `read`, `fread`, `fgetc`, `getc` and `getchar` calls. Read [here](#stdin_substitution) for more info |
+| setstdin  | Sets user defined STDIN data instead of real one, overriding `read`, `fread`, `fgetc`, `getc` and `getchar` calls. Read [here](#stdin-substitution) for more info |
 | nowrite | Forces open() to open files in readonly mode. Downgrading from readwrite or writeonly mode, and taking care of append, mktemp and other write-related flags as well |
 
 ## Building
