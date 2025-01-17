@@ -1,4 +1,4 @@
-// This code is GPLed by Yan Shoshitaishvili
+// This code is licenced under BSD (see LICENSE file) by Yan Shoshitaishvili
 
 #include <stdio.h>
 #include <string.h>
