@@ -4,6 +4,7 @@
 #include <dlfcn.h>
 #include "logging.h"
 #include <string.h>
+#include <malloc.h>
 
 //
 // originals
@@ -43,11 +44,21 @@ void *realloc(void *ptr, size_t size)
 		return r;
 	} else {
 		if (r) {
+			size_t old_size = malloc_usable_size(r);
 			void *rm = malloc(size);
 			preeny_info("malloc(%u) == %p\n", size, rm);
 
-			memcpy(rm, r, size);
-			preeny_info("memcpy(%p, %p, %u)\n", rm, r, size);
+			if (!rm) {
+				// realloc() contract: on failure, the original pointer
+				// must remain valid and unchanged -- do NOT free r here,
+				// or callers following that contract get a spurious UAF.
+				preeny_info("return %p\n", rm);
+				return rm;
+			}
+
+			size_t copy_size = size < old_size ? size : old_size;
+			memcpy(rm, r, copy_size);
+			preeny_info("memcpy(%p, %p, %u)\n", rm, r, copy_size);
 
 			original_free(r);
 			preeny_info("free(%p)\n", r);
